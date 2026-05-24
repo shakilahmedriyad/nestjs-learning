@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { AuthService } from 'src/auth/provider/auth.service';
 
 @Injectable()
 export class UsersService {
@@ -8,5 +9,24 @@ export class UsersService {
       name: 'John Doe',
       age: 30,
     };
+  }
+  getUsers(authService: AuthService) {
+    const isAuth = authService.isAuth(1);
+    if (!isAuth.auth) {
+      return 'you are not authorized to access this resource';
+    }
+    console.log('auth', isAuth);
+    return [
+      {
+        id: 1,
+        name: 'John Doe',
+        age: 30,
+      },
+      {
+        id: 2,
+        name: 'Jane Doe',
+        age: 25,
+      },
+    ];
   }
 }
