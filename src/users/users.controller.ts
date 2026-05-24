@@ -7,14 +7,14 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { usersService } from './providers/users.service';
+import { UsersService } from './providers/users.service';
 import { SaveUserDto } from './dto/save-user.dto';
 import { GetUserByIdDto } from './dto/get-userby-id.dto';
 import { PatchUserDto } from './dto/patch-user.dto';
 
 @Controller('/user')
-export class usersController {
-  constructor(private readonly userService: usersService) {}
+export class UsersController {
+  constructor(private readonly userService: UsersService) {}
   @Get()
   public getUsers() {
     return 'all the users';
@@ -27,7 +27,7 @@ export class usersController {
   ): string {
     const { name, age } = query;
 
-    return this.userService.getUser(name, age, getUserByIdDto.id);
+    return 'hello';
   }
 
   @Post()

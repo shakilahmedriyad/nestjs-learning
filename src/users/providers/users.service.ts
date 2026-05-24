@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class usersService {
-  getUser(name: string, age: number, id: number) {
-    return 'User Id = ' + id + ' User name = ' + name + ' User age = ' + age;
+export class UsersService {
+  getUserById(id: number) {
+    return {
+      id,
+      name: 'John Doe',
+      age: 30,
+    };
   }
 }
