@@ -15,7 +15,6 @@ export class UsersService {
     if (!isAuth.auth) {
       return 'you are not authorized to access this resource';
     }
-    console.log('auth', isAuth);
     return [
       {
         id: 1,
