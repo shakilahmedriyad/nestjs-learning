@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsDate,
+  IsArray,
   IsEnum,
   IsISO8601,
   IsNotEmpty,
@@ -9,9 +9,12 @@ import {
   IsUrl,
   MaxLength,
   MinLength,
+  ValidateNested,
 } from 'class-validator';
 import { statusType } from '../enums/statusType.enum';
 import { PostType } from '../enums/postType.enum';
+import { CreatePostMetaOptionDto } from './create-post-meta-option.dto';
+import { Type } from 'class-transformer';
 
 export class CreatePostDto {
   @ApiProperty({
@@ -86,7 +89,21 @@ export class CreatePostDto {
     description: 'The tags for the post',
     example: ['tag1', 'tag2'],
   })
+  @IsArray()
   @IsString({ each: true })
   @IsNotEmpty({ each: true })
   tags: string[];
+
+  @IsArray()
+  @ApiProperty({
+    description: 'The meta options for the post',
+    example: [
+      { key: 'meta1', value: 'value1' },
+      { key: 'meta2', value: 'value2' },
+    ],
+  })
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => CreatePostMetaOptionDto)
+  metaOptions: CreatePostMetaOptionDto[];
 }

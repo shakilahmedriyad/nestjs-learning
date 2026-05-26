@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { PostService } from './provider/post.service';
 import { UsersService } from 'src/users/providers/users.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { ApiResponse } from '@nestjs/swagger';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @Controller('post')
 export class PostController {
@@ -28,5 +29,10 @@ export class PostController {
   @Post()
   public createPost(@Body() createPostDto: CreatePostDto) {
     return this.postService.createPost(createPostDto);
+  }
+
+  @Patch()
+  public updatePost(@Body() updatePostDto: UpdatePostDto) {
+    return this.postService.updatePost(updatePostDto);
   }
 }
