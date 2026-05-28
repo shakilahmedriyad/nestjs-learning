@@ -8,7 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { UsersService } from './providers/users.service';
-import { SaveUserDto } from './dto/save-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { GetUserByIdDto } from './dto/get-userby-id.dto';
 import { PatchUserDto } from './dto/patch-user.dto';
 import { AuthService } from 'src/auth/provider/auth.service';
@@ -60,10 +60,13 @@ export class UsersController {
     status: 400,
     description: 'Bad Request.',
   })
+
+  /**
+   * Create a new user
+   */
   @Post()
-  public saveUser(@Body() saveUserDto: SaveUserDto) {
-    console.log(saveUserDto);
-    return 'ok your data will be saved no worries !!!!!';
+  public saveUser(@Body() saveUserDto: CreateUserDto) {
+    return this.userService.createUser(saveUserDto);
   }
 
   @ApiResponse({

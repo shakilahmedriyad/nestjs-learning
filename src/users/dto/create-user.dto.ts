@@ -10,16 +10,26 @@ import {
   MaxLength,
 } from 'class-validator';
 
-export class SaveUserDto {
+export class CreateUserDto {
   @ApiProperty({
-    description: 'The name of the user',
-    example: 'John Doe',
+    description: 'The first name of the user',
+    example: 'John',
   })
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
   @MaxLength(60)
-  name: string;
+  firstName: string;
+
+  @ApiProperty({
+    description: 'The last name of the user',
+    example: 'Doe',
+  })
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(3)
+  @MaxLength(60)
+  lastName: string;
 
   @ApiProperty({
     description: 'The age of the user',
@@ -40,10 +50,12 @@ export class SaveUserDto {
   email: string;
 
   @ApiProperty({
-    description: 'The mobile number of the user',
-    example: '+1234567890',
+    description: 'The password of the user',
+    example: 'P@ssw0rd',
   })
   @IsString()
   @IsNotEmpty()
-  mobile: string;
+  @MinLength(8)
+  @MaxLength(255)
+  password: string;
 }
