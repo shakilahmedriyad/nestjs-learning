@@ -3,6 +3,7 @@ import {
   IsArray,
   IsEnum,
   IsISO8601,
+  IsJSON,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -59,15 +60,16 @@ export class CreatePostDto {
   })
   @IsString()
   @IsOptional()
-  content: string;
+  content?: string;
 
   @ApiProperty({
-    description: 'The schema of the post',
-    example: 'https://schema.org/Article',
+    description: 'The JSON schema for the post',
+    example: '{"key": "value"}',
   })
   @IsString()
   @IsOptional()
-  schema: string;
+  @IsJSON()
+  schema?: string;
 
   @ApiProperty({
     description: 'The URL of the featured image',
@@ -75,7 +77,7 @@ export class CreatePostDto {
   })
   @IsUrl()
   @IsOptional()
-  featuredImageUrl: string;
+  featuredImageUrl?: string;
 
   @ApiProperty({
     description: 'The date the post was published',
@@ -83,7 +85,7 @@ export class CreatePostDto {
   })
   @IsISO8601()
   @IsOptional()
-  publishedOn: Date;
+  publishedOn?: Date;
 
   @ApiProperty({
     description: 'The tags for the post',
@@ -105,5 +107,5 @@ export class CreatePostDto {
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => CreatePostMetaOptionDto)
-  metaOptions: CreatePostMetaOptionDto[];
+  metaOptions?: CreatePostMetaOptionDto[];
 }
