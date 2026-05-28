@@ -28,4 +28,10 @@ export class CreateTagDto {
     example: 'technology',
   })
   slug: string;
+
+  @ApiPropertyOptional({
+    description: 'The URL of the featured image for the tag',
+    example: 'https://example.com/images/technology.jpg',
+  })
+  featuredImageUrl?: string;
 }

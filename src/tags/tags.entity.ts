@@ -29,6 +29,12 @@ export class Tag {
     nullable: true,
   })
   description?: string;
+  @Column({
+    type: 'varchar',
+    length: 1024,
+    nullable: true,
+  })
+  featuredImageUrl?: string;
 
   @Column({
     type: 'varchar',
