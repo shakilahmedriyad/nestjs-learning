@@ -1,6 +1,7 @@
 import { Column, PrimaryGeneratedColumn } from 'typeorm';
 import { PostType } from './enums/postType.enum';
 import { statusType } from './enums/statusType.enum';
+import { CreatePostMetaOptionDto } from './dto/create-post-meta-option.dto';
 
 export class Post {
   @PrimaryGeneratedColumn()
@@ -34,13 +35,13 @@ export class Post {
   status: statusType;
 
   @Column({
-    type: 'varchar',
+    type: 'text',
     nullable: true,
   })
   content: string;
 
   @Column({
-    type: 'json',
+    type: 'jsonb',
     nullable: true,
   })
   schema: string;
@@ -52,7 +53,7 @@ export class Post {
   featuredImageUrl: string;
 
   @Column({
-    type: 'varchar',
+    type: 'timestamp',
     nullable: true,
   })
   publishedOn: Date;
@@ -65,8 +66,8 @@ export class Post {
   tags: string[];
 
   @Column({
-    type: 'json',
+    type: 'jsonb',
     nullable: true,
   })
-  metaOptions: string;
+  metaOptions: CreatePostMetaOptionDto[];
 }

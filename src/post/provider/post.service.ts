@@ -2,9 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { PatchUserDto } from 'src/users/dto/patch-user.dto';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
+import { Post } from '../post.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class PostService {
+  constructor(
+    @InjectRepository(Post)
+    private readonly postRepository: Repository<Post>,
+  ) {}
   public getPosts(user: PatchUserDto) {
     return [
       {
@@ -22,11 +29,12 @@ export class PostService {
     ];
   }
 
+  /**
+   * Create a new post
+   */
+
   public createPost(createPostDto: CreatePostDto) {
-    return {
-      id: Math.floor(Math.random() * 1000),
-      ...createPostDto,
-    };
+    const newPost = this.postRepository.create(createPostDto);
   }
 
   public updatePost(updatePostDto: UpdatePostDto) {

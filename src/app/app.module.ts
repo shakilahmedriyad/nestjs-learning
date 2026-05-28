@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { UsersModule } from '../users/users.module';
 import { PostModule } from 'src/post/post.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/users/user.entity';
 
 @Module({
   imports: [
@@ -16,7 +15,7 @@ import { User } from 'src/users/user.entity';
       useFactory: () => ({
         type: 'postgres',
         host: 'localhost',
-        entities: [User],
+        autoLoadEntities: true,
         port: 5432,
         username: 'postgres',
         password: 'postgres',
