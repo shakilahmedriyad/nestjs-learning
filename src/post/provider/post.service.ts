@@ -5,12 +5,15 @@ import { UpdatePostDto } from '../dto/update-post.dto';
 import { Post } from '../post.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MetaOption } from 'src/meta-option/meta-option.entity';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
+    @InjectRepository(MetaOption)
+    private readonly metaOptionRepository: Repository<MetaOption>,
   ) {}
   public getPosts(user: PatchUserDto) {
     return [
@@ -33,8 +36,22 @@ export class PostService {
    * Create a new post
    */
 
-  public createPost(createPostDto: CreatePostDto) {
+  public async createPost(createPostDto: CreatePostDto) {
+    const newMetaOption = createPostDto.metaOptions
+      ? this.metaOptionRepository.create(createPostDto.metaOptions)
+      : null;
+
     const newPost = this.postRepository.create(createPostDto);
+
+    /**
+     * if meta options are provided, save them first and then associate with the post before saving the post.
+     *  */
+    if (newMetaOption) {
+      await this.metaOptionRepository.save(newMetaOption);
+      newPost.metaOptions = newMetaOption;
+    }
+
+    return await this.postRepository.save(newPost);
   }
 
   public updatePost(updatePostDto: UpdatePostDto) {

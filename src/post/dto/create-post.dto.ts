@@ -5,6 +5,7 @@ import {
   IsISO8601,
   IsJSON,
   IsNotEmpty,
+  IsObject,
   IsOptional,
   IsString,
   IsUrl,
@@ -103,6 +104,6 @@ export class CreatePostDto {
     },
   })
   @IsOptional()
-  @IsJSON()
+  @IsObject()
   metaOptions?: CreatePostMetaOptionDto;
 }

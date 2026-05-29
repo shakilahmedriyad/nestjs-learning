@@ -1,9 +1,10 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { PostType } from './enums/postType.enum';
 import { statusType } from './enums/statusType.enum';
 import { MetaOption } from 'src/meta-option/meta-option.entity';
 import { Tag } from 'src/tags/tags.entity';
 
+@Entity()
 export class Post {
   @PrimaryGeneratedColumn()
   id: number;
@@ -42,7 +43,7 @@ export class Post {
   content: string;
 
   @Column({
-    type: 'jsonb',
+    type: 'json',
     nullable: true,
   })
   schema: string;
@@ -63,12 +64,14 @@ export class Post {
     type: 'text',
     array: true,
     default: [],
+    nullable: true,
   })
-  tags: string[];
+  tags?: string[];
 
+  @OneToOne(() => MetaOption, (metaOption) => metaOption.id)
   @Column({
     type: 'json',
     nullable: true,
   })
-  metaOptions: MetaOption;
+  metaOptions?: MetaOption;
 }
