@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [
     UsersModule,
     PostModule,
+
     TypeOrmModule.forRootAsync({
       inject: [],
       imports: [],

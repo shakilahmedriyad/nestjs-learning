@@ -1,7 +1,8 @@
 import { Column, PrimaryGeneratedColumn } from 'typeorm';
 import { PostType } from './enums/postType.enum';
 import { statusType } from './enums/statusType.enum';
-import { CreatePostMetaOptionDto } from '../meta-option/dto/create-post-meta-option.dto';
+import { MetaOption } from 'src/meta-option/meta-option.entity';
+import { Tag } from 'src/tags/tags.entity';
 
 export class Post {
   @PrimaryGeneratedColumn()
@@ -66,8 +67,8 @@ export class Post {
   tags: string[];
 
   @Column({
-    type: 'jsonb',
+    type: 'json',
     nullable: true,
   })
-  metaOptions: CreatePostMetaOptionDto[];
+  metaOptions: MetaOption;
 }

@@ -15,7 +15,6 @@ import {
 import { statusType } from '../enums/statusType.enum';
 import { PostType } from '../enums/postType.enum';
 import { CreatePostMetaOptionDto } from '../../meta-option/dto/create-post-meta-option.dto';
-import { Type } from 'class-transformer';
 
 export class CreatePostDto {
   @ApiProperty({
@@ -91,21 +90,19 @@ export class CreatePostDto {
     description: 'The tags for the post',
     example: ['tag1', 'tag2'],
   })
+  @IsOptional()
   @IsArray()
   @IsString({ each: true })
   @IsNotEmpty({ each: true })
-  tags: string[];
+  tags?: string[];
 
-  @IsArray()
   @ApiProperty({
     description: 'The meta options for the post',
-    example: [
-      { key: 'meta1', value: 'value1' },
-      { key: 'meta2', value: 'value2' },
-    ],
+    example: {
+      metaValue: '{"key": "value"}',
+    },
   })
   @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => CreatePostMetaOptionDto)
-  metaOptions?: CreatePostMetaOptionDto[];
+  @IsJSON()
+  metaOptions?: CreatePostMetaOptionDto;
 }
