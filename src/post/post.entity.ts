@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -9,6 +10,7 @@ import { PostType } from './enums/postType.enum';
 import { statusType } from './enums/statusType.enum';
 import { MetaOption } from 'src/meta-option/meta-option.entity';
 import { Tag } from 'src/tags/tags.entity';
+import { User } from 'src/users/user.entity';
 
 @Entity()
 export class Post {
@@ -66,16 +68,14 @@ export class Post {
   })
   publishedOn: Date;
 
-  @Column({
-    type: 'text',
-    array: true,
-    default: [],
-    nullable: true,
-  })
-  tags?: string[];
-
   @OneToOne(() => MetaOption, (metaOption) => metaOption.post, {
     cascade: true,
   })
   metaOptions?: MetaOption;
+
+  @ManyToOne(() => User, (user) => user.post)
+  @JoinColumn()
+  author: User;
+
+  tags?: string[];
 }

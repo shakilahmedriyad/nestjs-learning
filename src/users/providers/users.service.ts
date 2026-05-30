@@ -19,12 +19,9 @@ export class UsersService {
   /**
    * Get user by id
    */
-  getUserById(id: number) {
-    return {
-      id,
-      name: 'John Doe',
-      age: 30,
-    };
+  public async getUserById(id: number) {
+    const user = await this.userRepository.findOneBy({ id });
+    return user;
   }
 
   /**

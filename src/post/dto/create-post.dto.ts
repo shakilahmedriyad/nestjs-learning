@@ -2,9 +2,11 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
   IsEnum,
+  IsInt,
   IsISO8601,
   IsJSON,
   IsNotEmpty,
+  IsNumber,
   IsObject,
   IsOptional,
   IsString,
@@ -16,6 +18,7 @@ import {
 import { statusType } from '../enums/statusType.enum';
 import { PostType } from '../enums/postType.enum';
 import { CreatePostMetaOptionDto } from '../../meta-option/dto/create-post-meta-option.dto';
+import { Type } from 'class-transformer';
 
 export class CreatePostDto {
   @ApiProperty({
@@ -105,5 +108,15 @@ export class CreatePostDto {
   })
   @IsOptional()
   @IsObject()
+  @ValidateNested()
+  @Type(() => CreatePostMetaOptionDto)
   metaOptions?: CreatePostMetaOptionDto;
+
+  @ApiProperty({
+    description: 'The ID of the author of the post',
+    example: 1,
+  })
+  @IsNotEmpty()
+  @IsInt()
+  authorId: number;
 }

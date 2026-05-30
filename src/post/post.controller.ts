@@ -22,11 +22,11 @@ export class PostController {
     private readonly userService: UsersService,
   ) {}
 
-  @Get(':user_id')
-  public getPosts(@Param('user_id') userId: number) {
-    const user = this.userService.getUserById(Number(userId));
-    return this.postService.getPosts(user);
-  }
+  // @Get(':user_id')
+  // public getPosts(@Param('user_id') userId: number) {
+  //   const user = this.userService.getUserById(Number(userId));
+  //   return this.postService.getPosts(user);
+  // }
 
   @ApiResponse({
     status: 201,
