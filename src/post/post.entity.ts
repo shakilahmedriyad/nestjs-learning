@@ -2,6 +2,8 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -77,5 +79,9 @@ export class Post {
   @JoinColumn()
   author: User;
 
-  tags?: string[];
+  @ManyToMany(() => Tag, {
+    onDelete: 'CASCADE',
+  })
+  @JoinTable()
+  tags?: Tag[];
 }

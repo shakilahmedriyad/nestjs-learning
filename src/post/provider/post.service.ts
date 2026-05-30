@@ -7,12 +7,16 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MetaOption } from 'src/meta-option/meta-option.entity';
 import { UsersService } from 'src/users/providers/users.service';
+import { TagService } from 'src/tags/provider/tags.service';
 
 @Injectable()
 export class PostService {
   constructor(
     /** inject user service to get user information for post creation and other operations */
     private readonly userService: UsersService,
+
+    /** inject tag service to get tag information for post creation and other operations */
+    private readonly tagService: TagService,
 
     /** inject post repository to perform database operations on post entity */
     @InjectRepository(Post)
@@ -40,9 +44,17 @@ export class PostService {
       return { message: `User with ID ${createPostDto.authorId} not found.` };
     }
 
+    /** get the tags by ids from the tag service */
+    const tags = await this.tagService.getTagByIds(createPostDto.tags);
+
+    console.log(tags);
+
     /** create a new post using the post repository and save it to the database */
-    const newPost = this.postRepository.create(createPostDto);
-    newPost.author = user;
+    const newPost = this.postRepository.create({
+      ...createPostDto,
+      author: user,
+      tags: tags.tags,
+    });
 
     return await this.postRepository.save(newPost);
   }

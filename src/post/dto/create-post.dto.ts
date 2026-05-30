@@ -91,14 +91,14 @@ export class CreatePostDto {
   publishedOn?: Date;
 
   @ApiProperty({
-    description: 'The tags for the post',
-    example: ['tag1', 'tag2'],
+    description: 'The tags Id for the post',
+    example: [1, 2],
   })
   @IsOptional()
   @IsArray()
-  @IsString({ each: true })
+  @IsInt({ each: true })
   @IsNotEmpty({ each: true })
-  tags?: string[];
+  tags?: number[];
 
   @ApiProperty({
     description: 'The meta options for the post',
