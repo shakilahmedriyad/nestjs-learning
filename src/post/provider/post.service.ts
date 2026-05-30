@@ -15,21 +15,9 @@ export class PostService {
     @InjectRepository(MetaOption)
     private readonly metaOptionRepository: Repository<MetaOption>,
   ) {}
-  public getPosts(user: PatchUserDto) {
-    return [
-      {
-        user,
-        id: 1,
-        title: 'First Post',
-        content: 'This is the first post',
-      },
-      {
-        user,
-        id: 2,
-        title: 'Second Post',
-        content: 'This is the second post',
-      },
-    ];
+  public async getPosts(user: PatchUserDto) {
+    const posts = await this.postRepository.find();
+    return posts;
   }
 
   /**
@@ -37,26 +25,24 @@ export class PostService {
    */
 
   public async createPost(createPostDto: CreatePostDto) {
-    const newMetaOption = createPostDto.metaOptions
-      ? this.metaOptionRepository.create(createPostDto.metaOptions)
-      : null;
-
     const newPost = this.postRepository.create(createPostDto);
-
-    /**
-     * if meta options are provided, save them first and then associate with the post before saving the post.
-     *  */
-    if (newMetaOption) {
-      await this.metaOptionRepository.save(newMetaOption);
-      newPost.metaOptions = newMetaOption;
-    }
-
     return await this.postRepository.save(newPost);
   }
 
+  /**
+   * Update an existing post
+   */
   public updatePost(updatePostDto: UpdatePostDto) {
     return {
       ...updatePostDto,
     };
+  }
+
+  /**
+   * Delete a post by ID
+   */
+  public async deletePost(id: number) {
+    await this.postRepository.delete(id);
+    return { message: `Post with ID ${id} has been deleted.` };
   }
 }
