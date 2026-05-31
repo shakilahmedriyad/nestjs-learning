@@ -26,7 +26,7 @@ export class PostService {
     @InjectRepository(MetaOption)
     private readonly metaOptionRepository: Repository<MetaOption>,
   ) {}
-  public async getPosts(user: PatchUserDto) {
+  public async getPosts() {
     const posts = await this.postRepository.find();
     return posts;
   }
@@ -46,8 +46,6 @@ export class PostService {
 
     /** get the tags by ids from the tag service */
     const tags = await this.tagService.getTagByIds(createPostDto.tags);
-
-    console.log(tags);
 
     /** create a new post using the post repository and save it to the database */
     const newPost = this.postRepository.create({
