@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
   ParseIntPipe,
   Patch,
   Post,
@@ -14,6 +13,7 @@ import { UsersService } from 'src/users/providers/users.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { ApiResponse } from '@nestjs/swagger';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { GetPostPaginationDto } from './dto/get-post-pagination.dto';
 
 @Controller('post')
 export class PostController {
@@ -23,7 +23,8 @@ export class PostController {
   ) {}
 
   @Get()
-  public getPosts() {
+  public getPosts(@Query() getPostPaginationDto: GetPostPaginationDto) {
+    console.log(getPostPaginationDto);
     return this.postService.getPosts();
   }
 

@@ -26,6 +26,11 @@ export class PostService {
     @InjectRepository(MetaOption)
     private readonly metaOptionRepository: Repository<MetaOption>,
   ) {}
+
+  /**   
+   * * Get all posts
+   */
+
   public async getPosts() {
     const posts = await this.postRepository.find();
     return posts;
