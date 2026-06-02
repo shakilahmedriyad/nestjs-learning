@@ -8,6 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MetaOption } from 'src/meta-option/meta-option.entity';
 import { UsersService } from 'src/users/providers/users.service';
 import { TagService } from 'src/tags/provider/tags.service';
+import { GetPostPaginationDto } from '../dto/get-post-pagination.dto';
+import { PaginationService } from 'src/common/pagination/provider/pagination.service';
 
 @Injectable()
 export class PostService {
@@ -18,6 +20,11 @@ export class PostService {
     /** inject tag service to get tag information for post creation and other operations */
     private readonly tagService: TagService,
 
+    /**
+     * injecting pagination service to perform pagination operations on post entity
+     */
+    private readonly paginationService: PaginationService,
+
     /** inject post repository to perform database operations on post entity */
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
@@ -27,12 +34,15 @@ export class PostService {
     private readonly metaOptionRepository: Repository<MetaOption>,
   ) {}
 
-  /**   
+  /**
    * * Get all posts
    */
 
-  public async getPosts() {
-    const posts = await this.postRepository.find();
+  public async getPosts(getPostPaginationDto: GetPostPaginationDto) {
+    const posts = await this.paginationService.PaginateQuery(
+      getPostPaginationDto,
+      this.postRepository,
+    );
     return posts;
   }
 

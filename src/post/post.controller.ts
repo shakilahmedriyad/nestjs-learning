@@ -24,8 +24,7 @@ export class PostController {
 
   @Get()
   public getPosts(@Query() getPostPaginationDto: GetPostPaginationDto) {
-    console.log(getPostPaginationDto);
-    return this.postService.getPosts();
+    return this.postService.getPosts(getPostPaginationDto);
   }
 
   @ApiResponse({
