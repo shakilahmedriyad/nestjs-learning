@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { PostService } from './provider/post.service';
 import { UsersService } from 'src/users/providers/users.service';
@@ -14,6 +15,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { ApiResponse } from '@nestjs/swagger';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { GetPostPaginationDto } from './dto/get-post-pagination.dto';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('post')
 export class PostController {
@@ -23,6 +25,7 @@ export class PostController {
   ) {}
 
   @Get()
+  @UseGuards(AuthGuard)
   public getPosts(@Query() getPostPaginationDto: GetPostPaginationDto) {
     return this.postService.getPosts(getPostPaginationDto);
   }
