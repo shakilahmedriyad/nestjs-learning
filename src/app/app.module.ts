@@ -14,7 +14,7 @@ const ENV = process.env.NODE_ENV;
     PostModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ENV ? `.env.${ENV}` : '.env',
+      envFilePath: ENV ? `.env.${ENV}.local` : '.env',
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
