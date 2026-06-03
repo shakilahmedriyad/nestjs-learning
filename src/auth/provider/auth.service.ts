@@ -1,9 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { HashingProvider } from './hashing.provider';
+import { SignInProvider } from './sign-in.provider';
+import { SignInDto } from '../dtos/sign-in.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly hashingProvider: HashingProvider) {}
+  constructor(
+    /**  Inject the HashingProvider to use its hashing capabilities */
+    private readonly hashingProvider: HashingProvider,
+    /**  Inject the SignInProvider to use its sign-in capabilities */
+    private readonly signInProvider: SignInProvider,
+  ) {}
   public isAuth(id: number) {
     return {
       id,
@@ -35,8 +42,8 @@ export class AuthService {
     return this.hashingProvider.compare(password, hash);
   }
 
-  public async signIn(email: string, password: string) {
+  public async signIn(signInDto: SignInDto) {
     // validate user by email and password
-    // if valid, return user object, else return null
+    return this.signInProvider.signIn(signInDto);
   }
 }

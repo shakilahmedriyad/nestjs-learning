@@ -5,6 +5,7 @@ import { UsersModule } from '../users/users.module';
 import { PostModule } from 'src/post/post.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 
 const ENV = process.env.NODE_ENV;
 
@@ -16,6 +17,7 @@ const ENV = process.env.NODE_ENV;
       isGlobal: true,
       envFilePath: ENV ? `.env.${ENV}.local` : '.env',
     }),
+    // initialize TypeOrmModule asynchronously to use ConfigService for database configuration
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       imports: [ConfigModule],
@@ -28,6 +30,21 @@ const ENV = process.env.NODE_ENV;
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_NAME'),
         synchronize: true,
+      }),
+    }),
+
+    // initialize JwtModule asynchronously to use ConfigService for JWT configuration
+    JwtModule.registerAsync({
+      global: true,
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: {
+          expiresIn: configService.get<number>('JWT_EXPIRES_IN'),
+          issuer: configService.get<string>('JWT_ISSUER'),
+          audience: configService.get<string>('JWT_AUDIENCE'),
+        },
       }),
     }),
   ],

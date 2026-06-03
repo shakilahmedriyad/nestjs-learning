@@ -5,6 +5,7 @@ import { User } from '../user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { CreateUserProvider } from './create-user.provider';
+import { GetUserByEmailProvider } from './get-user-by-email.provider';
 
 /**
  * user management service
@@ -18,6 +19,9 @@ export class UsersService {
 
     /**  Inject the Create user provider to use it */
     private readonly createUserProvider: CreateUserProvider,
+
+    /**  Inject the AuthService to use its hashing capabilities */
+    private readonly getUserByEmailProvider: GetUserByEmailProvider,
   ) {}
 
   /**
@@ -26,6 +30,13 @@ export class UsersService {
   public async getUserById(id: number) {
     const user = await this.userRepository.findOneBy({ id });
     return user;
+  }
+
+  /**
+   * Get user by email
+   */
+  public async getUserByEmail(email: string): Promise<User> {
+    return await this.getUserByEmailProvider.getUserByEmail(email);
   }
 
   /**

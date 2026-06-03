@@ -72,12 +72,7 @@ export class CreateUserProvider {
 
     try {
       const payload = { email: newUser.email, sub: newUser.id };
-      const token = this.jwtService.sign(payload, {
-        secret: this.configService.get('JWT_SECRET'),
-        expiresIn: parseInt(this.configService.get('JWT_EXPIRES_IN') || '3600'),
-        issuer: this.configService.get('JWT_ISSUER'),
-        audience: this.configService.get('JWT_AUDIENCE'),
-      });
+      const token = this.jwtService.sign(payload);
 
       return { token };
     } catch (error) {

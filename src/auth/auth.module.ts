@@ -4,7 +4,7 @@ import { AuthService } from './provider/auth.service';
 import { UsersModule } from 'src/users/users.module';
 import { HashingProvider } from './provider/hashing.provider';
 import { BcryptProvider } from './provider/bcrypt.provider';
-import { JwtModule } from '@nestjs/jwt';
+import { SignInProvider } from './provider/sign-in.provider';
 
 @Module({
   controllers: [AuthController],
@@ -14,13 +14,9 @@ import { JwtModule } from '@nestjs/jwt';
       provide: HashingProvider,
       useClass: BcryptProvider,
     },
+    SignInProvider,
   ],
-  imports: [
-    forwardRef(() => UsersModule),
-    JwtModule.register({
-      global: true,
-    }),
-  ],
+  imports: [forwardRef(() => UsersModule)],
   exports: [AuthService],
 })
 export class AuthModule {}
