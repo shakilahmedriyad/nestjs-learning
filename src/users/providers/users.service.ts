@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { User } from '../user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
+import { CreateUserProvider } from './create-user.provider';
 
 /**
  * user management service
@@ -14,6 +15,9 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
+    /**  Inject the Create user provider to use it */
+    private readonly createUserProvider: CreateUserProvider,
   ) {}
 
   /**
@@ -51,13 +55,6 @@ export class UsersService {
    * Create a new user
    */
   public async createUser(createUserDto: CreateUserDto) {
-    const user = await this.userRepository.findOneBy({
-      email: createUserDto.email,
-    });
-
-    /// handle exception later on
-
-    const newUser = this.userRepository.create(createUserDto);
-    return await this.userRepository.save(newUser);
+    return await this.createUserProvider.createUser(createUserDto);
   }
 }
