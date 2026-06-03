@@ -42,9 +42,7 @@ const ENV = process.env.NODE_ENV;
         global: true,
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: parseInt(
-            configService.get<string>('JWT_EXPIRES_IN') || '3600',
-          ), // Set token expiration time
+          expiresIn: configService.get('JWT_EXPIRES_IN'),
           issuer: configService.get<string>('JWT_ISSUER'),
           audience: configService.get<string>('JWT_AUDIENCE'),
         },
