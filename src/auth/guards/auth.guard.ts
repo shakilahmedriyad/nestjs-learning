@@ -11,11 +11,6 @@ import { UsersService } from 'src/users/providers/users.service';
 export class AuthGuard implements CanActivate {
   constructor(
     /**
-     * we need to inject the UsersService here, as we will need to use it to get the user from the database, based on the token that is sent in the request.
-     */
-    private readonly userService: UsersService,
-
-    /**
      * we also need to inject the AuthService here, as we will need to use it to verify the token that is sent in the request.
      */
     private readonly jwtService: JwtService,
@@ -41,21 +36,11 @@ export class AuthGuard implements CanActivate {
     if (!token) {
       throw new UnauthorizedException('No token provided');
     }
-    let decodedToken;
     try {
-      decodedToken = await this.jwtService.verify(token);
+      const payload = await this.jwtService.verifyAsync(token);
+      request['user'] = payload;
     } catch (error) {
-
       throw new UnauthorizedException('Invalid token');
-    }
-    if (!decodedToken) {
-      throw new UnauthorizedException('Invalid token');
-    }
-    const email = decodedToken.email;
-
-    const user = await this.userService.getUserByEmail(email);
-    if (!user) {
-      throw new UnauthorizedException('User not found');
     }
 
     return Promise.resolve(true);

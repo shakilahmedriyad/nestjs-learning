@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { PatchUserDto } from 'src/users/dto/patch-user.dto';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
@@ -10,6 +10,8 @@ import { UsersService } from 'src/users/providers/users.service';
 import { TagService } from 'src/tags/provider/tags.service';
 import { GetPostPaginationDto } from '../dto/get-post-pagination.dto';
 import { PaginationService } from 'src/common/pagination/provider/pagination.service';
+import type { Request } from 'express';
+import { REQUEST } from '@nestjs/core';
 
 @Injectable()
 export class PostService {
@@ -25,6 +27,9 @@ export class PostService {
      */
     private readonly paginationService: PaginationService,
 
+    @Inject(REQUEST)
+    private readonly request: Request,
+
     /** inject post repository to perform database operations on post entity */
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
@@ -39,6 +44,7 @@ export class PostService {
    */
 
   public async getPosts(getPostPaginationDto: GetPostPaginationDto) {
+    const user = this.request['user'];
     const posts = await this.paginationService.PaginateQuery(
       getPostPaginationDto,
       this.postRepository,

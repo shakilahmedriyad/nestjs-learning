@@ -25,7 +25,6 @@ export class PostController {
   ) {}
 
   @Get()
-  @UseGuards(AuthGuard)
   public getPosts(@Query() getPostPaginationDto: GetPostPaginationDto) {
     return this.postService.getPosts(getPostPaginationDto);
   }

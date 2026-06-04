@@ -6,6 +6,8 @@ import { PostModule } from 'src/post/post.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 const ENV = process.env.NODE_ENV;
 
@@ -48,8 +50,16 @@ const ENV = process.env.NODE_ENV;
         },
       }),
     }),
+
+    // other modules can be imported here
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}
