@@ -8,6 +8,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { AuthenticationGuard } from 'src/auth/guards/authentication/authentication.guard';
+import { NoAuthGuard } from 'src/auth/guards/no-auth/no-auth.guard';
 
 const ENV = process.env.NODE_ENV;
 
@@ -58,8 +60,10 @@ const ENV = process.env.NODE_ENV;
     AppService,
     {
       provide: APP_GUARD,
-      useClass: AuthGuard,
+      useClass: AuthenticationGuard,
     },
+    AuthGuard,
+    NoAuthGuard,
   ],
 })
 export class AppModule {}

@@ -15,7 +15,8 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { ApiResponse } from '@nestjs/swagger';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { GetPostPaginationDto } from './dto/get-post-pagination.dto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { AuthType } from 'src/auth/enums/auth.enum';
 
 @Controller('post')
 export class PostController {
@@ -24,6 +25,7 @@ export class PostController {
     private readonly userService: UsersService,
   ) {}
 
+  @Auth(AuthType.NONE)
   @Get()
   public getPosts(@Query() getPostPaginationDto: GetPostPaginationDto) {
     return this.postService.getPosts(getPostPaginationDto);

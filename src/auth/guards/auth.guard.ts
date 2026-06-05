@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from 'src/users/providers/users.service';
+import { USER_KEY } from '../constants/constants';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -38,7 +38,10 @@ export class AuthGuard implements CanActivate {
     }
     try {
       const payload = await this.jwtService.verifyAsync(token);
-      request['user'] = payload;
+      /**
+       * assign user to request body
+       */
+      request[USER_KEY] = payload;
     } catch (error) {
       throw new UnauthorizedException('Invalid token');
     }
