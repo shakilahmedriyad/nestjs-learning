@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
   IsEnum,
@@ -6,7 +6,6 @@ import {
   IsISO8601,
   IsJSON,
   IsNotEmpty,
-  IsNumber,
   IsObject,
   IsOptional,
   IsString,
@@ -111,12 +110,4 @@ export class CreatePostDto {
   @ValidateNested()
   @Type(() => CreatePostMetaOptionDto)
   metaOptions?: CreatePostMetaOptionDto;
-
-  @ApiProperty({
-    description: 'The ID of the author of the post',
-    example: 1,
-  })
-  @IsNotEmpty()
-  @IsInt()
-  authorId: number;
 }

@@ -33,12 +33,12 @@ export class TagService {
 
   public async getTagByIds(ids: number[] | undefined) {
     if (!ids || ids.length === 0) {
-      return { tags: [] };
+      return [];
     }
 
     const tags = await this.tagRepository.findBy({
       id: In(ids),
     });
-    return { tags };
+    return tags;
   }
 }

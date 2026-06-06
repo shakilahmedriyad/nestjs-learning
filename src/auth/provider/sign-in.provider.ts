@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/providers/users.service';
 import { HashingProvider } from './hashing.provider';
 import { SignInDto } from '../dtos/sign-in.dto';
+import { ActiveUserData } from '../interface/active-user-data.interface';
 
 @Injectable()
 export class SignInProvider {
@@ -51,7 +52,7 @@ export class SignInProvider {
 
     /** if the password is valid, sign a JWT token using the JwtService's sign method, and return the token */
     const payload = { email: user.email, sub: user.id };
-    const token = this.jwtService.sign(payload);
+    const token = this.jwtService.sign(payload as ActiveUserData);
     return { token };
   }
 }

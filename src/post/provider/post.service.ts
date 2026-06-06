@@ -1,4 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  RequestTimeoutException,
+} from '@nestjs/common';
 import { PatchUserDto } from 'src/users/dto/patch-user.dto';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
@@ -12,6 +17,8 @@ import { GetPostPaginationDto } from '../dto/get-post-pagination.dto';
 import { PaginationService } from 'src/common/pagination/provider/pagination.service';
 import type { Request } from 'express';
 import { REQUEST } from '@nestjs/core';
+import { User } from 'src/users/user.entity';
+import { Tag } from 'src/tags/tags.entity';
 
 @Injectable()
 export class PostService {
@@ -56,26 +63,46 @@ export class PostService {
    * Create a new post
    */
 
-  public async createPost(createPostDto: CreatePostDto) {
-    /** get the user by id from the user service */
-    const user = await this.userService.getUserById(createPostDto.authorId);
+  public async createPost(createPostDto: CreatePostDto, sub: number) {
+    let user: User | null;
+    let tags: Tag[];
 
-    /** handle the case where the user is not found */
-    if (user === null) {
-      return { message: `User with ID ${createPostDto.authorId} not found.` };
+    try {
+      /** get the user by id from the user service */
+      user = await this.userService.getUserById(sub);
+
+      /** handle the case where the user is not found */
+      if (user === null) {
+        return { message: `User with ID ${sub} not found.` };
+      }
+
+      /** get the tags by ids from the tag service */
+
+      tags = await this.tagService.getTagByIds(createPostDto.tags);
+    } catch (error) {
+      throw new RequestTimeoutException();
     }
 
-    /** get the tags by ids from the tag service */
-    const tags = await this.tagService.getTagByIds(createPostDto.tags);
+    let newPost: Post;
 
-    /** create a new post using the post repository and save it to the database */
-    const newPost = this.postRepository.create({
-      ...createPostDto,
-      author: user,
-      tags: tags.tags,
-    });
+    try {
+      /** create a new post using the post repository and save it to the database */
+      newPost = this.postRepository.create({
+        ...createPostDto,
+        author: user,
+        tags,
+      });
+    } catch (error) {
+      throw new BadRequestException('Email already exist');
+    }
 
-    return await this.postRepository.save(newPost);
+    try {
+      newPost = await this.postRepository.save(newPost);
+    } catch (error) {
+      throw new RequestTimeoutException();
+    }
+
+    return newPost;
   }
 
   /**

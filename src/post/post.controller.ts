@@ -17,6 +17,8 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { GetPostPaginationDto } from './dto/get-post-pagination.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { AuthType } from 'src/auth/enums/auth.enum';
+import { ActiveUser } from 'src/auth/decorators/active-user.decorator';
+import type { ActiveUserData } from 'src/auth/interface/active-user-data.interface';
 
 @Controller('post')
 export class PostController {
@@ -40,8 +42,11 @@ export class PostController {
     description: 'Bad Request.',
   })
   @Post()
-  public createPost(@Body() createPostDto: CreatePostDto) {
-    return this.postService.createPost(createPostDto);
+  public createPost(
+    @Body() createPostDto: CreatePostDto,
+    @ActiveUser('sub') sub: number,
+  ) {
+    return this.postService.createPost(createPostDto, sub);
   }
 
   @Patch()
