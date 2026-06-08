@@ -74,7 +74,7 @@ export class CreateUserProvider {
       const payload = { email: newUser.email, sub: newUser.id };
       const token = this.jwtService.sign(payload);
 
-      return { token };
+      return { newUser, token };
     } catch (error) {
       console.error('Error signing JWT token:', error);
       throw new UnauthorizedException();

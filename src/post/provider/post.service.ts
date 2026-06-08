@@ -4,7 +4,6 @@ import {
   Injectable,
   RequestTimeoutException,
 } from '@nestjs/common';
-import { PatchUserDto } from 'src/users/dto/patch-user.dto';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
 import { Post } from '../post.entity';

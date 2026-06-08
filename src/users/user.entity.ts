@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Post } from 'src/post/post.entity';
 import {
   Column,
@@ -36,6 +37,7 @@ export class User {
     type: 'varchar',
     length: 255,
   })
+  @Exclude()
   password: string;
 
   @OneToMany(() => Post, (post) => post.author)

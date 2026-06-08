@@ -1,11 +1,13 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
   Param,
   Patch,
   Post,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './providers/users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -13,6 +15,8 @@ import { GetUserByIdDto } from './dto/get-userby-id.dto';
 import { PatchUserDto } from './dto/patch-user.dto';
 import { AuthService } from 'src/auth/provider/auth.service';
 import { ApiResponse } from '@nestjs/swagger';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { AuthType } from 'src/auth/enums/auth.enum';
 
 @Controller('/user')
 export class UsersController {
@@ -64,6 +68,8 @@ export class UsersController {
   /**
    * Create a new user
    */
+  @Auth(AuthType.NONE)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   public saveUser(@Body() saveUserDto: CreateUserDto) {
     return this.userService.createUser(saveUserDto);
